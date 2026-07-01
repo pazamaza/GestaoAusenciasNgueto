@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Faltas - Colégio 2032</title>
+    
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    
+    <style>
+        body { background-color: #f4f7f6; }
+        .login-card { border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: none; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

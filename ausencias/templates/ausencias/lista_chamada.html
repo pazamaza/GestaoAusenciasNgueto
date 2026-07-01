@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body p-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'professor_dashboard' %}" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active">Registo de Assiduidade</li>
+            </ol>
+        </nav>
+        <h2 class="fw-bold text-dark mb-1">{{ cadeira.disciplina.nome }}</h2>
+        <p class="text-muted mb-0">Turma: <strong>{{ cadeira.turma.nome }}</strong> | Período: {{ cadeira.turma.get_turno_display }}</p>
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body bg-light rounded-4 p-3">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="data_chamada" class="form-label fw-semibold small text-secondary">Data da Aula</label>
+                    <input type="date" class="form-control" id="data_chamada" name="data_chamada" value="{{ data_hoje }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="quantidade_tempos" class="form-label fw-semibold small text-secondary">Tempos de Aula Omitidos (Falta)</label>
+                    <select class="form-select" id="quantidade_tempos" name="quantidade_tempos">
+                        <option value="1">1 Tempo Letivo</option>
+                        <option value="2" selected>2 Tempos Letivos (Bloco)</option>
+                        <option value="3">3 Tempos Letivos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4" style="width: 20%;">Nº Matrícula</th>
+                        <th style="width: 50%;">Nome Completo do Estudante</th>
+                        <th class="text-center" style="width: 30%;">Presença / Ausência</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estudante in estudantes %}
+                    <tr>
+                        <td class="ps-4 fw-semibold text-secondary">{{ estudante.numero_estudante }}</td>
+                        <td>
+                            <div class="fw-bold text-dark">{{ estudante.utilizador.get_full_name }}</div>
+                        </td>
+                        <td class="text-center">
+                            <div class="form-check form-switch d-inline-block">
+                                <input class="form-check-input" type="checkbox" role="switch" 
+                                       id="check_{{ estudante.id }}" 
+                                       name="ausentes" 
+                                       value="{{ estudante.id }}">
+                                <label class="form-check-label small text-danger fw-semibold" for="check_{{ estudante.id }}">
+                                    Marcar Ausente
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center p-4 text-muted">
+                            Nenhum estudante matriculado nesta turma para o ano letivo corrente.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-6">
+            <a href="{% url 'professor_dashboard' %}" class="btn btn-outline-secondary w-100 py-2 fw-semibold rounded-3">
+                Cancelar e Voltar
+            </a>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 shadow-sm">
+                Guardar Folha de Presença
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}

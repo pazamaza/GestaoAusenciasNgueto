@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center mt-5" style="min-height: 70vh;">
+    <div class="col-md-8 text-center">
+        <!-- Logotipo ou Emblema Placeholder -->
+        <div class="mb-4">
+            <span class="bg-primary text-white p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-bank" viewBox="0 0 16 16">
+                  <path d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89L8 0ZM3.777 3h8.447L8 1 3.777 3ZM2 6v7h1V6H2Zm2 0v7h2.5V6H4Zm3.5 0v7h1V6h-1Zm2 0v7H12V6H9.5ZM13 6v7h1V6h-1Zm2-1V4H1v1h14Zm-.39 9H1.39l-.25 1h13.72l-.25-1Z"/>
+                </svg>
+            </span>
+        </div>
+        
+        <h1 class="display-4 fw-bold text-dark mb-3">Complexo Escolar nº 2032</h1>
+        <h3 class="text-secondary fw-normal mb-5">Sistema Integrado de Gestão de Assiduidade</h3>
+        
+        <div class="row justify-content-center g-4">
+            <!-- Botão de Acesso - Estudantes -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 hover-card">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Sou Estudante</h5>
+                        <p class="text-muted small mb-4">Aceda para justificar faltas e consultar o seu risco de reprovação.</p>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary w-100 fw-semibold rounded-pill">
+                            Área do Estudante
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Acesso - Professores -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 hover-card">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Sou Professor</h5>
+                        <p class="text-muted small mb-4">Faça a chamada rápida da sua turma e valide os documentos pendentes.</p>
+                        <a href="{% url 'login' %}" class="btn btn-primary w-100 fw-semibold rounded-pill shadow-sm">
+                            Área do Professor
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botão de Acesso - Administração -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 hover-card bg-light">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Administração</h5>
+                        <p class="text-muted small mb-4">Monitorização global das estatísticas e gestão do ecossistema.</p>
+                        <a href="{% url 'login' %}" class="btn btn-dark w-100 fw-semibold rounded-pill shadow-sm">
+                            Acesso Restrito
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-5 text-muted small">
+            &copy; 2026 Complexo Escolar nº 2032 - General Ngueto. Desenvolvido para operação local.
+        </div>
+    </div>
+</div>
+
+<!-- Estilo extra para o efeito hover nos cartões -->
+<style>
+    .hover-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+</style>
+{% endblock %}

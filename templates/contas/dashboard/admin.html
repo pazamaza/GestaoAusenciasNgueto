@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-dark">Painel de Direção Escolar</h2>
+        <p class="text-muted">Administrador: <strong>{{ request.user.get_full_name }}</strong> | Visão Global do Turno Noturno</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'admin:index' %}" class="btn btn-dark btn-sm me-2 fw-semibold" target="_blank">
+            Aceder Configurações (Admin)
+        </a>
+        <form method="POST" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm">Sair</button>
+        </form>
+    </div>
+</div>
+
+<!-- Secção 1: Indicadores Globais da Escola -->
+<div class="row mb-4 g-3">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body">
+                <h6 class="text-muted fw-semibold mb-1">População Estudantil</h6>
+                <h2 class="fw-bold text-dark mb-0">{{ total_estudantes }} Alunos</h2>
+                <small class="text-success">Distribuídos em {{ total_turmas }} Turmas</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body">
+                <h6 class="text-muted fw-semibold mb-1">Corpo Docente</h6>
+                <h2 class="fw-bold text-dark mb-0">{{ total_professores }} Profs.</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 bg-danger text-white">
+            <div class="card-body">
+                <h6 class="text-white-50 fw-semibold mb-1">Faltas Injustificadas</h6>
+                <h2 class="fw-bold mb-0">{{ faltas_injustificadas }}</h2>
+                <small>De um total de {{ total_faltas }} registos</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 bg-warning">
+            <div class="card-body">
+                <h6 class="text-dark-50 fw-semibold mb-1">Documentos em Espera</h6>
+                <h2 class="fw-bold text-dark mb-0">{{ justificativas_pendentes }}</h2>
+                <small class="text-dark">A aguardar revisão dos professores</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Secção 2: Gráfico de Risco por Turma -->
+    <div class="col-md-7 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+            <h5 class="fw-bold mb-4">Top 5 Turmas com Maior Absentismo</h5>
+            {% for turma in turmas_criticas %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-semibold text-secondary">{{ turma.nome }} ({{ turma.get_turno_display }})</span>
+                    <span class="badge bg-danger rounded-pill">{{ turma.total_faltas }} Faltas</span>
+                </div>
+                <div class="progress rounded-pill" style="height: 8px;">
+                    <!-- A largura é calculada em percentagem relativa (simulada aqui para demonstração visual) -->
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {% widthratio turma.total_faltas total_faltas|default:1 100 %}%"></div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-light text-center text-muted">
+                Sem dados de absentismo registados.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Secção 3: Auditoria em Tempo Real -->
+    <div class="col-md-5 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+            <h5 class="fw-bold mb-4">Últimas Marcações (Auditoria)</h5>
+            <div class="list-group list-group-flush">
+                {% for log in logs_recentes %}
+                <div class="list-group-item px-0 pt-0 mb-3 border-0">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold text-dark">{{ log.estudante.utilizador.get_full_name }}</span>
+                        <small class="text-muted">{{ log.data_registo|date:"d/m H:i" }}</small>
+                    </div>
+                    <p class="mb-0 small text-secondary">
+                        Falta em <strong>{{ log.cadeira_turma.disciplina.nome }}</strong> ({{ log.quantidade_tempos }}T) <br>
+                        <span class="text-muted" style="font-size: 0.75rem;">Marcado por: Prof. {{ log.cadeira_turma.professor.last_name }}</span>
+                    </p>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center small">Nenhum log recente.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

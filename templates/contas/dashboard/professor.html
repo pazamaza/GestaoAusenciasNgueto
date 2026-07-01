@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-dark">Área do Professor</h2>
+        <p class="text-muted">Bem-vindo(a), Prof. {{ request.user.first_name }} {{ request.user.last_name }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm">Sair do Sistema</button>
+        </form>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 text-white bg-primary h-100">
+            <div class="card-body p-4">
+                <h6 class="text-uppercase fw-semibold mb-1">Minhas Turmas Atribuídas</h6>
+                <h1 class="display-4 fw-bold mb-0">{{ total_turmas }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 bg-warning h-100">
+            <div class="card-body p-4">
+                <h6 class="text-uppercase fw-semibold mb-1 text-dark">Justificativas Pendentes</h6>
+                <a href="{% url 'listar_justificativas_pendentes' %}" class="btn btn-sm btn-dark mt-2">Rever Documentos</a>
+                <h1 class="display-4 fw-bold text-dark mb-0">
+                    {{ pendentes_count }}
+                </h1>
+                {% if pendentes_count > 0 %}
+                    <a href="#" class="btn btn-sm btn-dark mt-2">Rever Documentos</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="fw-bold mb-3">Gestão de Assiduidade Diária</h4>
+<div class="row">
+    {% for cadeira in minhas_cadeiras %}
+    <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-secondary">{{ cadeira.turma.nome }} ({{ cadeira.turma.get_turno_display }})</span>
+                    <span class="text-muted small">Ano {{ cadeira.turma.ano_letivo }}</span>
+                </div>
+                <h5 class="card-title fw-bold">{{ cadeira.disciplina.nome }}</h5>
+                <p class="text-muted small mb-4">Selecione esta disciplina para iniciar a chamada da turma.</p>
+                
+            <a href="{% url 'registrar_chamada' cadeira.id %}" class="btn btn-primary w-100 fw-semibold">
+    Marcar Faltas
+</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info border-0 rounded-4" role="alert">
+            Nenhuma turma atribuída ao seu perfil no momento. Contacte a administração do Complexo Escolar nº 2032.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

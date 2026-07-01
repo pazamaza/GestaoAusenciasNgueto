@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card login-card mt-5">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold text-primary">Complexo Escolar nº 2032</h3>
+                    <p class="text-muted">Acesso ao Sistema de Gestão de Faltas</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <button type="submit" class="btn btn-primary w-100 mt-3 py-2 fw-bold">
+                        Entrar no Sistema
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

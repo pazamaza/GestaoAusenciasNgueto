@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h3 class="fw-bold text-dark">Justificar Ausência Letiva</h3>
+                <p class="text-muted mb-0">Insira as informações e anexe um comprovativo oficial (Atestado Médico ou Declaração).</p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="{% url 'estudante_dashboard' %}" class="btn btn-outline-secondary w-50 py-2 fw-semibold">
+                            Voltar ao Painel
+                        </a>
+                        <button type="submit" class="btn btn-success w-50 py-2 fw-bold shadow-sm">
+                            Submeter Documento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
