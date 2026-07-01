@@ -1,0 +1,7 @@
+# Ignorar banco de dados
+db.sqlite3
+
+# Ignorar ambiente virtual
+venv/
+__pycache__/
+*.pyc
